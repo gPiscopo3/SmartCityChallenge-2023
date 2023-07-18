@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Forecasting</title>
+
+  <style>
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+
+</head>
+  <body>
+    <div id="myDiv" class="centered">
+      <canvas id="myChart"></canvas>
+    </div>
+  </body>
+</html>
+
+<script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  var myDiv = document.getElementById('myDiv');
+  myDiv.style.width = '800px'; // Imposta la larghezza del div a 400 pixel
+  myDiv.style.height = '400px'; // Imposta l'altezza del div a 200 pixel
+
+  fetch('http://localhost:8080/rec/rec/forecasting/2023-07-14', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*' // Aggiungi l'origine consentita come header
+    },
+  })
+          .then(response => response.json())
+          .then(data => {
+            // Gestisci la risposta dei dati
+            console.log(data);
+          })
+          .catch(error => {
+            // Gestisci gli error
+            console.error('Si è verificato un errore:', error);
+          });
+
+
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio'],
+      datasets: [{
+        label: 'Dati di esempio',
+        data: [10, 20, 30, 25, 40],
+        backgroundColor: 'rgba(0, 128, 255, 0.5)',
+        borderColor: 'rgba(0, 128, 255, 1)',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+    }
+  });
+</script>
