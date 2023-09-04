@@ -1,6 +1,6 @@
 <config>
     <mongo>mongodb://172.31.3.218:31201</mongo>
-    <kafka>"172.31.3.218:31200"</kafka>
+    <kafka>172.31.3.218:31200</kafka>
     <fitting>src/main/python/fittingProduzione.py</fitting>
     <costOptimizer>src/main/python/costOptimizer.py</costOptimizer>
     <forecaster>src/main/python/LoadModel.py</forecaster>
