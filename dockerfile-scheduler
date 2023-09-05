@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # Aggiornamento dei repository, installazione di java e maven
-RUN apt-get update && apt-get install -y openjdk-18-jdk
+RUN apt-get update && apt-get install -y openjdk-17-jdk
 
 # Installare Python e relative librerie
 RUN apt-get install -y python3 && apt-get install -y python3-pip 
