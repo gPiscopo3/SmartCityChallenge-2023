@@ -5,7 +5,7 @@ stages:
 compile-job:
   stage: compile
   image:
-    name: maven:3.8.2-openjdk-17
+    name: maven:3.8.2-openjdk-18
     pull_policy: if-not-present
   artifacts:
     paths:
