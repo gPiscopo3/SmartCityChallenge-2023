@@ -31,4 +31,50 @@ scheduler-job:
     - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest"
     - echo "Compile complete."
 
+forecaster-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-forecaster" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-forecaster:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-forecaster:latest"
+    - echo "Compile complete."
 
+kafka-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-kafka" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-kafka:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-kafka:latest"
+    - echo "Compile complete."
+
+api-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-api" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-api:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-api:latest"
+    - echo "Compile complete."
