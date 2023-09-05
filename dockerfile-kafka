@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:18-jre-focal
 
 RUN mkdir /Challenge
 COPY /target/kafka-jar-with-dependencies.jar /Challenge
@@ -9,4 +9,4 @@ WORKDIR /Challenge
 RUN chmod 775 kafka-jar-with-dependencies.jar 
 
 EXPOSE 8080
-ENTRYPOINT [ "java", "jar", "kafka-jar-with-dependencies.jar"]
+ENTRYPOINT ["java", "-jar", "kafka-jar-with-dependencies.jar"]

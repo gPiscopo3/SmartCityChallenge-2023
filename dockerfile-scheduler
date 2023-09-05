@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # Aggiornamento dei repository, installazione di java e maven
-RUN apt-get update && apt-get install -y openjdk-17-jdk
+RUN apt-get update && apt-get install -y openjdk-18-jdk
 
 # Installare Python e relative librerie
 RUN apt-get install -y python3 && apt-get install -y python3-pip 
@@ -16,4 +16,4 @@ WORKDIR /Challenge
 RUN chmod 775 scheduling-jar-with-dependencies.jar 
 
 EXPOSE 8080
-ENTRYPOINT [ "java", "jar", "scheduling-jar-with-dependencies.jar"]
+ENTRYPOINT ["java", "-jar", "scheduling-jar-with-dependencies.jar"]
