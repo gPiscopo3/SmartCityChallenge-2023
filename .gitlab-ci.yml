@@ -27,7 +27,7 @@ scheduler-job:
     - docker info
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t "dockerfile-scheduler" -t $CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest" .
+    - docker build -t "dockerfile-scheduler" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest" .
     - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest"
     - echo "Compile complete."
 
