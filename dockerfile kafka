@@ -1,0 +1,14 @@
+FROM ubuntu:latest
+
+# Aggiornamento dei repository, installazione di java e maven
+RUN apt-get update && apt-get install -y openjdk-18-jdk
+
+RUN mkdir /Challenge
+COPY /target/kafka-jar-with-dependencies.jar /Challenge
+COPY config.xml /Challenge
+
+WORKDIR /Challenge
+
+RUN chmod 775 kafka-jar-with-dependencies.jar 
+
+ENTRYPOINT [ "java", "jar", "kafka-jar-with-dependencies.jar"]
