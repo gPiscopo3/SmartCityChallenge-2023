@@ -3,6 +3,6 @@
     <kafka>172.31.3.218:31200</kafka>
     <fitting>src/main/python/fittingProduzione.py</fitting>
     <costOptimizer>src/main/python/costOptimizer.py</costOptimizer>
-    <forecaster>src/main/python/LoadModel.py</forecaster>
+    <forecaster>LoadModel.py</forecaster>
     <trainer>src/main/python/SaveModel.py</trainer>
 </config>
