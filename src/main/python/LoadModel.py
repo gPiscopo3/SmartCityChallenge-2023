@@ -3,7 +3,7 @@ import pickle
 
 data_Wet = pd.read_csv("irradiance.csv")
 
-model_pkl_file = '//Challenge//save_model.pkl'
+model_pkl_file = '/Challenge/save_model.pkl'
 
 with open(model_pkl_file, 'rb') as file:
     model = pickle.load(file)
