@@ -48,7 +48,7 @@ public class PythonForecaster implements Forecaster, Configuration {
             return null;
         }
 
-        ProcessBuilder processBuilder = new ProcessBuilder("python", forecaster);
+        ProcessBuilder processBuilder = new ProcessBuilder("python3", forecaster);
 
         try {
             Process process = processBuilder.start();
