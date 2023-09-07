@@ -41,6 +41,8 @@ public class PythonForecaster implements Forecaster, Configuration {
     @Override
     public ForecastingGiornaliero forecasta(LocalDate giorno, IrradianzaGiornaliera irradianza) {
 
+        System.out.println("Forecasting...");
+        System.out.println(irradianza.toString());
         try{
             toCSV("irradiance.csv", irradianza);
         }catch(IOException e){
