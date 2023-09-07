@@ -1,5 +1,5 @@
 <config>
-    <mongo>mongodb://172.31.3.218:31201</mongo>
+    <mongo>mongodb://172.30.3.154:27017/</mongo>
     <kafka>172.31.3.218:31200</kafka>
     <fitting>src/main/python/fittingProduzione.py</fitting>
     <costOptimizer>src/main/python/costOptimizer.py</costOptimizer>
