@@ -8,11 +8,17 @@ import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
 import rec.planner.model.giornalieri.AllocazioneConsumatore;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
+import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.giornalieri.SchedulingGiornaliero;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static rec.planner.model.Day.MTU_NUMBER;
 
 
 public class RestApiImpl implements RestApi {
@@ -107,6 +113,44 @@ public class RestApiImpl implements RestApi {
         }
     }
 
+
+    @Override
+    public Response getBalanceForecastingByDate(String data) {
+        LocalDate localDate;
+
+        try {
+
+            if (data == null || data.equals("") || data.equalsIgnoreCase("last")) {
+                localDate = Day.getNextDay();
+                while (!dataManager.isSchedulingPresent(localDate) && localDate.isAfter(LocalDate.EPOCH))
+                    localDate = localDate.minusDays(1);
+                if (localDate.equals(LocalDate.EPOCH))
+                    return Response.status(Response.Status.NOT_FOUND).build();
+            } else if (data.equalsIgnoreCase("today"))
+                localDate = Day.getDay();
+            else if (data.equalsIgnoreCase("tomorrow") || data.equalsIgnoreCase("next"))
+                localDate = Day.getNextDay();
+            else
+                localDate = getLocalDate(data);
+            SchedulingGiornaliero schedulingGiornaliero = dataManager.getScheduling(localDate);
+            ForecastingGiornaliero forecastingGiornaliero = dataManager.getForecasting(localDate);
+
+            List<Double> balance = new ArrayList<>();
+
+            for(int i = 0; i < MTU_NUMBER; i++){
+                balance.add(forecastingGiornaliero.getProduzione().getValue(i) - schedulingGiornaliero.getTotaleConsumato().getValue(i));
+            }
+
+            return Response.ok(balance).build();
+
+        } catch (NotFoundElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (DateTimeParseException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+    }
+
     @Override
     public Response getPreferenzeByDate(String data, String smartMeter) {
 
@@ -137,6 +181,20 @@ public class RestApiImpl implements RestApi {
         } catch (DateTimeParseException e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+    }
+
+    @Override
+    public Response setPreferenze(Preferenza preferenze) {
+
+
+        try {
+            dataManager.savePreferenza(preferenze);
+            return Response.created(URI.create("preferenze/?data=" + preferenze.getGiorno().format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    + "&smartMeter=" + preferenze.getSmartMeter())).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
     }
 }
 

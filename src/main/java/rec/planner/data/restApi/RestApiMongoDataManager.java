@@ -21,6 +21,7 @@ import java.util.Objects;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static rec.planner.data.MongoDocumentConverter.fromDocument;
+import static rec.planner.data.MongoDocumentConverter.toDocument;
 
 public class RestApiMongoDataManager implements RestApiDataManager{
 
@@ -107,6 +108,14 @@ public class RestApiMongoDataManager implements RestApiDataManager{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void savePreferenza(Preferenza preferenza) {
+        MongoCollection<Document> collection =
+                database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
+
+        collection.insertOne(toDocument(preferenza));
     }
 
 

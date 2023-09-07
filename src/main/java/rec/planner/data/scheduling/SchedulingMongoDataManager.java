@@ -158,6 +158,9 @@ public class SchedulingMongoDataManager implements SchedulingDataManager{
 
     @Override
     public void savePreferenza(Preferenza preferenza) {
+        MongoCollection<Document> collection =
+                database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
+        collection.insertOne(toDocument(preferenza));
     }
 }

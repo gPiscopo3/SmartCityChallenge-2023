@@ -3,6 +3,7 @@ package rec.planner.apiEsterne;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import rec.planner.model.giornalieri.Preferenza;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,14 +34,35 @@ public interface RestApi {
 
 
     /**
+     * Restituisci il forecasting del bilancio energetico
+     * @param data (opzionale)
+     */
+
+    @GET
+    @Path("/balance")
+    Response getBalanceForecastingByDate(@QueryParam("data") String data);
+
+
+    /**
      * restituisce le preferenze della data specificato
      * @param data queryParam (opzionale)
      * @param smartMeter queryParam (opzionale)
      * @return
      */
+
     @GET
     @Path("/preferenze")
     Response getPreferenzeByDate(@QueryParam("data") String data, @QueryParam("smartMeter") String smartMeter);
+
+
+    /**
+     * Inserisce le preferenze
+     * @param preferenze
+     * @return
+     */
+    @POST
+    @Path("/preferenze")
+    Response setPreferenze(Preferenza preferenze);
 
 
 }

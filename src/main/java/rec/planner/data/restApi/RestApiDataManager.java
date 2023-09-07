@@ -16,4 +16,6 @@ public interface RestApiDataManager {
     List<Preferenza> getPreferenze(LocalDate date);
     boolean isForecastingPresent(LocalDate date);
     boolean isSchedulingPresent(LocalDate date);
+
+    void savePreferenza(Preferenza preferenza);
 }
