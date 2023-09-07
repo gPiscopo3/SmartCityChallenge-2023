@@ -92,12 +92,13 @@ public class SchedulerDemon extends Thread implements Configuration {
 
                 for(Consumatore consumatore: consumatori){
                     try {
-                        /*Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
+                        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
                                 .registerTypeAdapter(Boolean.class, new BooleanToIntSerializer()).create();
 
                         Preferenza preferenza =
-                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(), MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE)*/
-                        Preferenza preferenza = preferenzeApi.getPreferenze(consumatore.getSmartMeter());
+                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(),
+                                MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE);
+                        // Preferenza preferenza = preferenzeApi.getPreferenze(consumatore.getSmartMeter());
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
 
@@ -116,6 +117,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                     producerScheduling.produce("DA_scheduling", scheduling);
                     System.out.println("scheduling effettuato");
                 }catch (Exception e){
+                    System.err.println(e);
                     System.out.println("impossibile effettuare lo scheduling");
                     try {
                         Thread.sleep(1000*3600*hour_min);

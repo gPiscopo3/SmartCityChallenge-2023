@@ -1,8 +1,8 @@
 <config>
     <mongo>mongodb://172.30.3.154:27017/</mongo>
-    <kafka>172.31.3.218:31200</kafka>
-    <fitting>src/main/python/fittingProduzione.py</fitting>
-    <costOptimizer>src/main/python/costOptimizer.py</costOptimizer>
+    <kafka>172.30.3.122:9092</kafka>
+    <fitting>fittingProduzione.py</fitting>
+    <costOptimizer>costOptimizer.py</costOptimizer>
     <forecaster>LoadModel.py</forecaster>
     <trainer>src/main/python/SaveModel.py</trainer>
 </config>
