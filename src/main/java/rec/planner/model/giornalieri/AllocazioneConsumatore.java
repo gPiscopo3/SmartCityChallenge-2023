@@ -7,13 +7,16 @@ import java.time.LocalDate;
 public class AllocazioneConsumatore {
 
     private LocalDate giorno;
+
     private String smartMeter;
+    private double consumo;
     private MTUArray<Boolean> allocazione = new MTUArray<>();
 
 
-    public AllocazioneConsumatore(LocalDate giorno, String smartMeter, MTUArray<Boolean> allocazione) {
+    public AllocazioneConsumatore(LocalDate giorno, String smartMeter, double consumo, MTUArray<Boolean> allocazione) {
         this.giorno = giorno;
         this.smartMeter = smartMeter;
+        this.consumo = consumo;
         this.allocazione = allocazione;
     }
 
@@ -43,5 +46,13 @@ public class AllocazioneConsumatore {
 
     public void setGiorno(LocalDate giorno) {
         this.giorno = giorno;
+    }
+
+    public double getConsumo() {
+        return consumo;
+    }
+
+    public void setConsumo(double consumo) {
+        this.consumo = consumo;
     }
 }

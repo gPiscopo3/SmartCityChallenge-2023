@@ -109,7 +109,8 @@ public class PythonScheduler implements Scheduler, Configuration {
                         arrayAllocazione.add(false);
 
                 }
-                arrayScheduling.add(new AllocazioneConsumatore(forecasting.getGiorno(), consumatori.get(j).getSmartMeter(), MTUArray.ofValues(arrayAllocazione)));
+                arrayScheduling.add(new AllocazioneConsumatore(forecasting.getGiorno(), consumatori.get(j).getSmartMeter(),
+                        consumatori.get(j).getConsumoMedio(), MTUArray.ofValues(arrayAllocazione)));
 
             }
 
