@@ -107,5 +107,36 @@ public class RestApiImpl implements RestApi {
         }
     }
 
+    @Override
+    public Response getPreferenzeByDate(String data, String smartMeter) {
+
+        LocalDate localDate;
+
+        try {
+
+            if (data == null || data.equals("") || data.equalsIgnoreCase("last")) {
+                localDate = Day.getNextDay();
+                while (!dataManager.isForecastingPresent(localDate) && localDate.isAfter(LocalDate.EPOCH))
+                    localDate = localDate.minusDays(1);
+                if (localDate.equals(LocalDate.EPOCH))
+                    return Response.status(Response.Status.NOT_FOUND).build();
+            } else if (data.equalsIgnoreCase("today"))
+                localDate = Day.getDay();
+            else if (data.equalsIgnoreCase("tomorrow") || data.equalsIgnoreCase("next"))
+                localDate = Day.getNextDay();
+            else
+                localDate = getLocalDate(data);
+
+            if(smartMeter!=null && !smartMeter.equals(""))
+                return Response.ok(dataManager.getPreferenze(localDate, smartMeter)).build();
+            else
+                return Response.ok(dataManager.getPreferenze(localDate)).build();
+
+        } catch (NotFoundElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (DateTimeParseException e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 }
 

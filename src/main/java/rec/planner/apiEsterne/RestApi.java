@@ -28,8 +28,19 @@ public interface RestApi {
      * @param data pathParam
      */
     @GET
-    @Path("/forecasting/")
+    @Path("/forecasting")
     Response getForecastingByDate(@QueryParam("data") String data);
+
+
+    /**
+     * restituisce le preferenze della data specificato
+     * @param data queryParam (opzionale)
+     * @param smartMeter queryParam (opzionale)
+     * @return
+     */
+    @GET
+    @Path("/preferenze")
+    Response getPreferenzeByDate(@QueryParam("data") String data, @QueryParam("smartMeter") String smartMeter);
 
 
 }

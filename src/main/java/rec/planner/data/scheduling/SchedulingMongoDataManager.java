@@ -12,17 +12,20 @@ import rec.planner.data.MongoInstance;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.MTUArray;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
+import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.giornalieri.SchedulingGiornaliero;
 import rec.planner.model.giornalieri.TariffeCorrenti;
 import rec.planner.model.instantanee.Consumatore;
 import rec.planner.model.instantanee.TariffaOraria;
 
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static rec.planner.data.MongoDocumentConverter.fromDocument;
 import static rec.planner.data.MongoDocumentConverter.toDocument;
@@ -96,6 +99,32 @@ public class SchedulingMongoDataManager implements SchedulingDataManager{
     }
 
     @Override
+    public Preferenza getPreferenze(LocalDate date, String smartMeter) throws NotFoundElementException {
+        MongoCollection<Document> collection =
+                database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
+
+        Document document =
+                collection.find(and(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE)),eq("smartMeter", smartMeter))).first();
+
+        try{
+            return fromDocument(Objects.requireNonNull(document), Preferenza.class);
+        }catch (NullPointerException e){
+            throw new NotFoundElementException();
+        }
+    }
+
+    @Override
+    public List<Preferenza> getPreferenze(LocalDate date) {
+        MongoCollection<Document> collection =
+                database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
+
+        List<Preferenza> preferenze = new ArrayList<>();
+        for(Document preferenza :collection.find(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE))))
+            preferenze.add(fromDocument(preferenza, Preferenza.class));
+        return preferenze;
+    }
+
+    @Override
     public boolean isForecastingPresent(LocalDate date) {
         try {
             getForecasting(date);
@@ -125,5 +154,10 @@ public class SchedulingMongoDataManager implements SchedulingDataManager{
         }catch (NullPointerException e){
             mongoCollection.insertOne(toDocument(scheduling));
         }
+    }
+
+    @Override
+    public void savePreferenza(Preferenza preferenza) {
+
     }
 }

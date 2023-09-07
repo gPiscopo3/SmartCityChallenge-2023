@@ -98,6 +98,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                         Preferenza preferenza =
                                 new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(), MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE)*/
                         Preferenza preferenza = preferenzeApi.getPreferenze(consumatore.getSmartMeter());
+                        dataManager.savePreferenza(preferenza);
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
 
