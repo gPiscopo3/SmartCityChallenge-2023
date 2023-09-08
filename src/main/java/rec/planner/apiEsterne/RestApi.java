@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.instantanee.Consumatore;
+import rec.planner.model.instantanee.ProduttoreConsumatoreMTU;
 
 
 @Produces("application/json")
@@ -96,12 +97,11 @@ public interface RestApi {
 
     /**
      * Permette di registrare la produzione instantea in un momento preciso associato a uno smart meter.
-     * @param smartMeter
-     * @param produzione
+     * @param produttoreConsumatoreMTU
      */
     @Path("produzione")
     @POST
-    Response registerProduzione(String smartMeter, double produzione);
+    Response registerProduzione(ProduttoreConsumatoreMTU produttoreConsumatoreMTU);
 
 
 }
