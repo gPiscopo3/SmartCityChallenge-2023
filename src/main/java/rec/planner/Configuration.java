@@ -14,6 +14,6 @@ public interface Configuration {
         INTERNE, ESTERNE;
     }
 
-    FontePreferenze FONTE_PREFERENZE = FontePreferenze.valueOf(read("preferenze"));
+    FontePreferenze FONTE_PREFERENZE = FontePreferenze.valueOf(read("preferenze").toUpperCase());
 
 }
