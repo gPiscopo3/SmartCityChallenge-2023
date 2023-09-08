@@ -2,8 +2,8 @@ package rec.planner.forecaster;
 
 import rec.planner.Configuration;
 import rec.planner.data.forecasting.ForecastingDataManager;
-import rec.planner.data.forecasting.ForecastingMongoDataManager;
 import rec.planner.data.forecasting.SolcastMeteoService;
+import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class ForecasterDemon extends Thread implements Configuration {
 
-    private final ForecastingDataManager dataManager = ForecastingMongoDataManager.getInstance();
+    private final ForecastingDataManager dataManager = MongoDataManager.getInstance();
     private final SolcastMeteoService meteoService = SolcastMeteoService.getInstance();
     private final Forecaster forecaster = new PythonForecaster();
     private static final int delay = 3600*12*1000;

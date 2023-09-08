@@ -7,7 +7,7 @@ import rec.planner.model.instantanee.TariffaOraria;
 public interface KafkaDataManager {
 
     void addProduttore(ProduttoreConsumatoreMTU produttore);
-    void updateConsumatore(ProduttoreConsumatoreMTU consumatore, double factorEWMA);
+    void updateConsumatore(String smartMeter, double consumo, double factorEWMA);
     void addTariffa(TariffaOraria tariffaOraria);
     void registerConsumatore(Consumatore consumatore);
 

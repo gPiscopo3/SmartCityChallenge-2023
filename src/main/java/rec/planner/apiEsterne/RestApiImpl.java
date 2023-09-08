@@ -2,14 +2,16 @@ package rec.planner.apiEsterne;
 
 
 import jakarta.ws.rs.core.Response;
+import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.data.restApi.RestApiDataManager;
-import rec.planner.data.restApi.RestApiMongoDataManager;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
 import rec.planner.model.giornalieri.AllocazioneConsumatore;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.giornalieri.SchedulingGiornaliero;
+import rec.planner.model.instantanee.Consumatore;
+import rec.planner.model.instantanee.ProduttoreConsumatoreMTU;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -24,7 +26,7 @@ import static rec.planner.model.Day.MTU_NUMBER;
 public class RestApiImpl implements RestApi {
 
 
-    private final RestApiDataManager dataManager = RestApiMongoDataManager.getInstance();
+    private final RestApiDataManager dataManager = MongoDataManager.getInstance();
 
 
     public RestApiImpl() {
@@ -194,6 +196,22 @@ public class RestApiImpl implements RestApi {
         }catch (Exception e){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
+    }
+
+
+    @Override
+    public Response registerConsumatore(Consumatore consumatore) {
+
+        dataManager.registerConsumatore(consumatore);
+        return Response.created(URI.create("/consumatori/" + consumatore.getSmartMeter())).build();
+    }
+
+    @Override
+    public Response updateConsumoInstantaneo(String smartMeter, double consumo) {
+
+        dataManager.updateConsumatore(smartMeter, consumo, 0.5);
+        return Response.ok().build();
 
     }
 }

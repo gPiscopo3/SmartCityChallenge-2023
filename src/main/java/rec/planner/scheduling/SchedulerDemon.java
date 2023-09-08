@@ -1,23 +1,17 @@
 package rec.planner.scheduling;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import rec.planner.Configuration;
+import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.data.scheduling.PreferenzeApi;
 import rec.planner.data.scheduling.PreferenzeRestApi;
 import rec.planner.data.scheduling.SchedulingDataManager;
-import rec.planner.data.scheduling.SchedulingMongoDataManager;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
-import rec.planner.model.MTUArray;
-import rec.planner.model.Tipologia;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.giornalieri.SchedulingGiornaliero;
 import rec.planner.model.giornalieri.TariffeCorrenti;
 import rec.planner.model.instantanee.Consumatore;
-import rec.planner.model.serializer.BooleanToIntSerializer;
-import rec.planner.model.serializer.LocalDateSerializer;
 import rec.planner.streamprocessor.ProducerScheduling;
 
 import java.time.LocalDate;
@@ -26,7 +20,7 @@ import java.util.*;
 
 public class SchedulerDemon extends Thread implements Configuration {
 
-    private final SchedulingDataManager dataManager = SchedulingMongoDataManager.getInstance();
+    private final SchedulingDataManager dataManager = MongoDataManager.getInstance();
     private final PreferenzeApi preferenzeApi= PreferenzeRestApi.getRestApi();
 
     private final Scheduler scheduler = PythonScheduler.fittingProduzione();

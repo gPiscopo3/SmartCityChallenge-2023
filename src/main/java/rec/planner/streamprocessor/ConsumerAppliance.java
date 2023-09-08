@@ -2,12 +2,9 @@ package rec.planner.streamprocessor;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import rec.planner.data.kafka.KafkaDataManager;
-import rec.planner.data.kafka.KafkaMongoDataManager;
 import rec.planner.model.instantanee.Consumatore;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ConsumerAppliance extends Consumer{

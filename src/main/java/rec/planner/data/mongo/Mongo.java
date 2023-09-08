@@ -1,4 +1,4 @@
-package rec.planner.data;
+package rec.planner.data.mongo;
 
 
 import com.mongodb.MongoClientSettings;

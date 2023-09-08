@@ -4,6 +4,7 @@ package rec.planner.apiEsterne;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import rec.planner.model.giornalieri.Preferenza;
+import rec.planner.model.instantanee.Consumatore;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,6 +64,24 @@ public interface RestApi {
     @POST
     @Path("/preferenze")
     Response setPreferenze(Preferenza preferenze);
+
+
+    /**
+     * Registra un consumatore
+     * @param consumatore
+     * @return
+     */
+    @POST
+    @Path("/consumatori")
+    Response registerConsumatore(Consumatore consumatore);
+
+    /**
+     * Aggiorna il consumo medio di un consumatore dato lo smart meter e il consumo instanteneo
+     * @param smartMeter
+     * @param consumo
+     */
+    @Path("/consumatori/{smartMeter}")
+    Response updateConsumoInstantaneo(@PathParam("smartMeter") String smartMeter, double consumo);
 
 
 }
