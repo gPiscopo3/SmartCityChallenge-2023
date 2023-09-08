@@ -21,7 +21,7 @@ public interface RestApi {
      */
     @GET
     @Path("/scheduling")
-    Response getSchedulingByDate(@QueryParam("data") String data, @QueryParam("smartMeter") String smartMeter);
+    Response getSchedulingByDate(@QueryParam("date") String data, @QueryParam("smartMeter") String smartMeter);
 
 
     /**
@@ -31,7 +31,7 @@ public interface RestApi {
      */
     @GET
     @Path("/forecasting")
-    Response getForecastingByDate(@QueryParam("data") String data);
+    Response getForecastingByDate(@QueryParam("date") String data);
 
 
     /**
@@ -42,7 +42,7 @@ public interface RestApi {
 
     @GET
     @Path("/balance")
-    Response getBalanceForecastingByDate(@QueryParam("data") String data);
+    Response getBalanceForecastingByDate(@QueryParam("date") String data);
 
 
     /**
@@ -53,8 +53,8 @@ public interface RestApi {
      */
 
     @GET
-    @Path("/preferenze")
-    Response getPreferenzeByDate(@QueryParam("data") String data, @QueryParam("smartMeter") String smartMeter);
+    @Path("/preferences")
+    Response getPreferenzeByDate(@QueryParam("date") String data, @QueryParam("smartMeter") String smartMeter);
 
 
     /**
@@ -63,7 +63,7 @@ public interface RestApi {
      * @return URI
      */
     @POST
-    @Path("/preferenze")
+    @Path("/preferences")
     Response setPreferenze(Preferenza preferenze);
 
 
@@ -73,7 +73,7 @@ public interface RestApi {
      * @return URI
      */
     @POST
-    @Path("/consumatori")
+    @Path("/consumers")
     Response registerConsumatore(Consumatore consumatore);
 
 
@@ -83,7 +83,7 @@ public interface RestApi {
      * @return lista dei consumatori
      */
     @GET
-    @Path("/consumatori")
+    @Path("/consumers")
     Response getConsumatoriByHomeController(@QueryParam("homeController") String homeController);
     /**
      * Aggiorna il consumo medio di un consumatore dato lo smart meter e il consumo instanteneo
@@ -91,7 +91,7 @@ public interface RestApi {
      * @param consumo
      */
     @PUT
-    @Path("/consumatori/{smartMeter}")
+    @Path("/consumers/{smartMeter}")
     Response updateConsumoInstantaneo(@PathParam("smartMeter") String smartMeter, double consumo);
 
 
@@ -99,7 +99,7 @@ public interface RestApi {
      * Permette di registrare la produzione instantea in un momento preciso associato a uno smart meter.
      * @param produttoreConsumatoreMTU
      */
-    @Path("produzione")
+    @Path("/producers")
     @POST
     Response registerProduzione(ProduttoreConsumatoreMTU produttoreConsumatoreMTU);
 
