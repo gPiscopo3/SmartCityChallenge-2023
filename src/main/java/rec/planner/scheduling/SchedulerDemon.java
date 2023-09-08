@@ -86,16 +86,10 @@ public class SchedulerDemon extends Thread implements Configuration {
 
                 for(Consumatore consumatore: consumatori){
                     try {
-                        /*Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
-                                .registerTypeAdapter(Boolean.class, new BooleanToIntSerializer()).create();
 
-                        Preferenza preferenza =
-                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(), MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE)*/
-                        Preferenza preferenza = preferenzeApi.getPreferenze(consumatore.getSmartMeter());
-                        dataManager.savePreferenza(preferenza);
+                        Preferenza preferenza = recuperaPreferenze(consumatore.getSmartMeter());
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
-
 
                     } catch(Exception ignored) {}
 
@@ -130,6 +124,41 @@ public class SchedulerDemon extends Thread implements Configuration {
 
         }
     }
+
+    private Preferenza recuperaPreferenze(String smartMeter) throws NotFoundElementException{
+
+         /*Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
+                                .registerTypeAdapter(Boolean.class, new BooleanToIntSerializer()).create();
+
+                        Preferenza preferenza =
+                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(), MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE)*/
+
+        Preferenza preferenza = null;
+
+        if(FONTE_PREFERENZE.equals(FontePreferenze.INTERNE))
+            try {
+                dataManager.savePreferenza(preferenzeApi.getPreferenze(smartMeter));
+            }catch (NotFoundElementException ingnored){}
+
+
+        LocalDate localDate = LocalDate.now();
+            while(localDate.isAfter(LocalDate.EPOCH) && preferenza == null) {
+                try {
+                    preferenza = dataManager.getPreferenze(localDate, smartMeter);
+                }catch (NotFoundElementException e){
+                    localDate = localDate.minusDays(1);
+                }
+            }
+
+            if(preferenza == null)
+                throw new NotFoundElementException();
+
+
+        return preferenza;
+
+
+    }
+
 
     private LocalDate domani(){
         return Day.getNextDay();

@@ -5,4 +5,5 @@
     <costOptimizer>src/main/python/costOptimizer.py</costOptimizer>
     <forecaster>LoadModel.py</forecaster>
     <trainer>src/main/python/SaveModel.py</trainer>
+    <preferenze>esterne</preferenze>
 </config>
