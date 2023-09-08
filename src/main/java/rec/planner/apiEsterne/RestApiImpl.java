@@ -208,9 +208,20 @@ public class RestApiImpl implements RestApi {
     }
 
     @Override
+    public Response getConsumatoriByHomeController(String homeController) {
+
+        return Response.ok(dataManager.getConsumatoriByHomeController(homeController)).build();
+
+    }
+
+    @Override
     public Response updateConsumoInstantaneo(String smartMeter, double consumo) {
 
-        dataManager.updateConsumatore(smartMeter, consumo, 0.5);
+        try {
+            dataManager.updateConsumatore(smartMeter, consumo, 0.5);
+        } catch (NotFoundElementException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.ok().build();
 
     }

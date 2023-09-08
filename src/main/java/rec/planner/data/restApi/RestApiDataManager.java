@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface RestApiDataManager {
 
+
+    List<Consumatore> getConsumatoriByHomeController(String homeController);
+
     SchedulingGiornaliero getScheduling(LocalDate localDate) throws NotFoundElementException;
     ForecastingGiornaliero getForecasting(LocalDate localDate) throws NotFoundElementException;
     Preferenza getPreferenze(LocalDate date, String smartMeter) throws NotFoundElementException;
@@ -22,6 +25,6 @@ public interface RestApiDataManager {
     void savePreferenza(Preferenza preferenza);
 
     void addProduttore(ProduttoreConsumatoreMTU produttore);
-    void updateConsumatore(String smartMeter, double consumo, double factorEWMA);
+    void updateConsumatore(String smartMeter, double consumo, double factorEWMA) throws NotFoundElementException;
     void registerConsumatore(Consumatore consumatore);
 }

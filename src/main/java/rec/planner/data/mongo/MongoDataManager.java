@@ -76,6 +76,20 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
 
         return new TariffeCorrenti(MTUArray.ofValues(costi), MTUArray.ofValues(ricavi), MTUArray.ofValues(incentivi));
     }
+
+    @Override
+    public List<Consumatore> getConsumatoriByHomeController(String homeController) {
+        MongoCollection<Document> collection =
+                database.getCollection("consumatori", Document.class).withCodecRegistry(codecRegistry);
+
+        List<Consumatore> consumatori = new ArrayList<>();
+
+        for(Document document: collection.find(eq("homeController", homeController)))
+            consumatori.add(fromDocument(document, Consumatore.class));
+
+        return consumatori;
+    }
+
     @Override
     public SchedulingGiornaliero getScheduling(LocalDate date) throws NotFoundElementException{
         MongoCollection<Document> collection =
@@ -224,15 +238,17 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
     @Override
-    public void updateConsumatore(String smartMeter, double consumo,  double factorEWMA) {
+    public void updateConsumatore(String smartMeter, double consumo,  double factorEWMA) throws NotFoundElementException{
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
 
         Consumatore consumatoreMedio = collection.find(eq("smartMeter", smartMeter)).first();
         if(consumatoreMedio==null)
-            collection.insertOne(new Consumatore(smartMeter, consumo));
+            throw new NotFoundElementException();
         else
             collection.replaceOne(eq("smartMeter", smartMeter),
-                    new Consumatore(smartMeter, consumatoreMedio.getConsumoMedio() * ( 1 - factorEWMA) + consumo * factorEWMA));
+                    new Consumatore(smartMeter, consumatoreMedio.getHomeController(),
+                            consumatoreMedio.getConsumoMedio()* ( 1 - factorEWMA) + consumo * factorEWMA,
+                            consumatoreMedio.getConsumoNominale()));
     }
 
     @Override
@@ -253,7 +269,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
 
         if(collection.find(eq("smartMeter", consumatore.getSmartMeter())).first() == null){
-            collection.insertOne(new Consumatore(consumatore.getSmartMeter(), consumatore.getConsumoMedio(), consumatore.getConsumoNominale()));
+            collection.insertOne(consumatore);
         }
 
 

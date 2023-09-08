@@ -6,9 +6,6 @@ import jakarta.ws.rs.core.Response;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.instantanee.Consumatore;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 
 @Produces("application/json")
 @Path("/rec")
@@ -78,11 +75,21 @@ public interface RestApi {
     @Path("/consumatori")
     Response registerConsumatore(Consumatore consumatore);
 
+
+    /**
+     * Restituisci i consumatori relativi a un home controller
+     * @param homeController
+     * @return lista dei consumatori
+     */
+    @GET
+    @Path("/consumatori")
+    Response getConsumatoriByHomeController(@QueryParam("homeController") String homeController);
     /**
      * Aggiorna il consumo medio di un consumatore dato lo smart meter e il consumo instanteneo
      * @param smartMeter
      * @param consumo
      */
+    @PUT
     @Path("/consumatori/{smartMeter}")
     Response updateConsumoInstantaneo(@PathParam("smartMeter") String smartMeter, double consumo);
 
