@@ -214,5 +214,17 @@ public class RestApiImpl implements RestApi {
         return Response.ok().build();
 
     }
+
+
+    @Override
+    public Response registerProduzione(String smartMeter, double produzione) {
+
+        ProduttoreConsumatoreMTU produttoreConsumatoreMTU = new ProduttoreConsumatoreMTU();
+        produttoreConsumatoreMTU.setSmartMeter(smartMeter);
+        produttoreConsumatoreMTU.setValue(produzione);
+        dataManager.addProduttore(produttoreConsumatoreMTU);
+
+        return Response.ok().build();
+    }
 }
 

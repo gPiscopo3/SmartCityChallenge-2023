@@ -19,6 +19,7 @@ public interface RestApi {
      * Restituisce lo scheduling
      * @param data queryParam (opzionale)
      * @param smartMeter queryParam (opzionale)
+     * @return oggeto scheduling
      */
     @GET
     @Path("/scheduling")
@@ -28,6 +29,7 @@ public interface RestApi {
     /**
      * Restituisce forecasting della data specificata
      * @param data pathParam
+     * @return oggetto forecasting
      */
     @GET
     @Path("/forecasting")
@@ -37,6 +39,7 @@ public interface RestApi {
     /**
      * Restituisci il forecasting del bilancio energetico
      * @param data (opzionale)
+     * @return array di double per ogni unità di tempo
      */
 
     @GET
@@ -48,7 +51,7 @@ public interface RestApi {
      * restituisce le preferenze della data specificato
      * @param data queryParam (opzionale)
      * @param smartMeter queryParam (opzionale)
-     * @return
+     * @return preferenze relative allo smart meter oppure tutte le preferenze di una giornata
      */
 
     @GET
@@ -59,7 +62,7 @@ public interface RestApi {
     /**
      * Inserisce le preferenze
      * @param preferenze
-     * @return
+     * @return URI
      */
     @POST
     @Path("/preferenze")
@@ -69,7 +72,7 @@ public interface RestApi {
     /**
      * Registra un consumatore
      * @param consumatore
-     * @return
+     * @return URI
      */
     @POST
     @Path("/consumatori")
@@ -82,6 +85,16 @@ public interface RestApi {
      */
     @Path("/consumatori/{smartMeter}")
     Response updateConsumoInstantaneo(@PathParam("smartMeter") String smartMeter, double consumo);
+
+
+    /**
+     * Permette di registrare la produzione instantea in un momento preciso associato a uno smart meter.
+     * @param smartMeter
+     * @param produzione
+     */
+    @Path("produzione")
+    @POST
+    Response registerProduzione(String smartMeter, double produzione);
 
 
 }
