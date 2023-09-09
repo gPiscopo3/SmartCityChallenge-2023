@@ -47,14 +47,13 @@ public interface RestApi {
 
     /**
      * restituisce le preferenze della data specificato
-     * @param data queryParam (opzionale)
      * @param smartMeter queryParam (opzionale)
      * @return preferenze relative allo smart meter oppure tutte le preferenze di una giornata
      */
 
     @GET
     @Path("/preferences")
-    Response getPreferenzeByDate(@QueryParam("date") String data, @QueryParam("smartMeter") String smartMeter);
+    Response getPreferenze(@QueryParam("smartMeter") String smartMeter);
 
 
     /**

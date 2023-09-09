@@ -2,6 +2,8 @@ package rec.planner.model.instantanee;
 
 import java.io.Serializable;
 
+import static rec.planner.model.Day.MTU_NUMBER;
+
 public class Consumatore implements Serializable {
 
     private String smartMeter;

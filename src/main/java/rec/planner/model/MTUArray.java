@@ -111,6 +111,10 @@ public class MTUArray<T> implements Iterable<T>, Serializable {
         return values;
     }
 
+    public int getMtuNumber(){
+        return values.size();
+    }
+
     public void setValues(List<T> values) {
         this.values = values;
     }

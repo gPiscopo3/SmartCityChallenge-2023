@@ -141,17 +141,7 @@ public class SchedulerDemon extends Thread implements Configuration {
             }catch (NotFoundElementException ingnored){}
 
 
-        LocalDate localDate = LocalDate.now();
-            while(localDate.isAfter(LocalDate.EPOCH) && preferenza == null) {
-                try {
-                    preferenza = dataManager.getPreferenze(localDate, smartMeter);
-                }catch (NotFoundElementException e){
-                    localDate = localDate.minusDays(1);
-                }
-            }
-
-            if(preferenza == null)
-                throw new NotFoundElementException();
+        dataManager.getPreferenze(smartMeter);
 
 
         return preferenza;
@@ -164,7 +154,7 @@ public class SchedulerDemon extends Thread implements Configuration {
         return Day.getNextDay();
     }
 
-    private List<Boolean> generateArray(){
+    public static List<Boolean> generateArray(){
 
         List<Boolean> array = new ArrayList<>();
         for(int i = 0 ; i <24; i++)

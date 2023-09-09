@@ -16,8 +16,8 @@ public interface SchedulingDataManager {
     TariffeCorrenti getTariffeCorrrenti();
     ForecastingGiornaliero getForecasting(LocalDate date) throws NotFoundElementException;
     SchedulingGiornaliero getScheduling(LocalDate date) throws NotFoundElementException;
-    Preferenza getPreferenze(LocalDate date, String smartMeter) throws NotFoundElementException;
-    List<Preferenza> getPreferenze(LocalDate date);
+    Preferenza getPreferenze(String smartMeter) throws NotFoundElementException;
+    List<Preferenza> getPreferenze();
     boolean isForecastingPresent(LocalDate date);
     boolean isSchedulingPresent(LocalDate date);
     void setScheduling(SchedulingGiornaliero scheduling);
