@@ -31,8 +31,14 @@ public class PythonForecaster implements Forecaster, Configuration {
         int i = 0;
 
         for (Double value : irradianza.getIrradiazione()){
-            String[] data = {ora.toString() + " " + Day.getStartTime(i), Double.toString(value)};
+            String[] data = {ora.toString() + " " + Day.getStartTime(i) + ":00", Double.toString(value)};
+            String[] data2 = {ora.toString() + " " + Day.getStartTime(i) + ":15", Double.toString(value)};
+            String[] data3 = {ora.toString() + " " + Day.getStartTime(i) + ":30", Double.toString(value)};
+            String[] data4 = {ora.toString() + " " + Day.getStartTime(i) + ":45", Double.toString(value)};
             writer.writeNext(data);
+            writer.writeNext(data2);
+            writer.writeNext(data3);
+            writer.writeNext(data4);
             i++;
         }
         writer.close();
@@ -44,6 +50,8 @@ public class PythonForecaster implements Forecaster, Configuration {
         System.out.println("Forecasting...");
         System.out.println(irradianza.toString());
         try{
+            /* to 96 */
+
             toCSV("irradiance.csv", irradianza);
         }catch(IOException e){
             System.err.println("Dati irradianza non trovati: " + e);

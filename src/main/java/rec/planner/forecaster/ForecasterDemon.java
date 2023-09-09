@@ -58,6 +58,7 @@ public class ForecasterDemon extends Thread implements Configuration {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("Next day energy forecast is now on database.");
 
             }
 
