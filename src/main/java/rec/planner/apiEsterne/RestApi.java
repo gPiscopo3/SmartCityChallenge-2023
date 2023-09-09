@@ -9,6 +9,7 @@ import rec.planner.model.instantanee.ProduttoreConsumatoreMTU;
 
 
 @Produces("application/json")
+
 @Path("/rec")
 public interface RestApi {
 
@@ -63,6 +64,7 @@ public interface RestApi {
      */
     @POST
     @Path("/preferences")
+    @Consumes("application/json")
     Response setPreferenze(Preferenza preferenze);
 
 
@@ -73,6 +75,7 @@ public interface RestApi {
      */
     @POST
     @Path("/consumers")
+    @Consumes("application/json")
     Response registerConsumatore(Consumatore consumatore);
 
 
@@ -100,6 +103,7 @@ public interface RestApi {
      */
     @Path("/producers")
     @POST
+    @Consumes("application/json")
     Response registerProduzione(ProduttoreConsumatoreMTU produttoreConsumatoreMTU);
 
 

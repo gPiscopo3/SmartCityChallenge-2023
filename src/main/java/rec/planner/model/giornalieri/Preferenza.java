@@ -44,7 +44,7 @@ public class Preferenza {
     }
 
     public int getDurata() {
-        return (int) (((double)durata*MTU_NUMBER)/disponibilita.getMtuNumber());
+        return (int) (((double)durata*MTU_NUMBER)/disponibilita.mtuNumber());
     }
 
     public void setDurata(int durata) {

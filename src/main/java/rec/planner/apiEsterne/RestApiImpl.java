@@ -175,6 +175,7 @@ public class RestApiImpl implements RestApi {
     @Override
     public Response setPreferenze(Preferenza preferenze) {
 
+        System.out.println(preferenze);
 
         try {
             dataManager.savePreferenza(preferenze);
