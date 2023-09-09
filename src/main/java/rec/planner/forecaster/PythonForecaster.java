@@ -86,7 +86,7 @@ public class PythonForecaster implements Forecaster, Configuration {
 
                 for(String value : results){
                     double d = Double.parseDouble(value);
-                    if (d < 0)
+                    if (d < 0.1)
                         d = 0.0;
                     values.add(d);
                 }
