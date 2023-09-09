@@ -246,7 +246,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
             throw new NotFoundElementException();
         else
             collection.replaceOne(eq("smartMeter", smartMeter),
-                    new Consumatore(smartMeter, consumatoreMedio.getHomeController(),
+                    new Consumatore(smartMeter, consumatoreMedio.getHomeController(), consumatoreMedio.getNome(),
                             consumatoreMedio.getConsumoMedio()* ( 1 - factorEWMA) + consumo * factorEWMA,
                             consumatoreMedio.getConsumoNominale()));
     }

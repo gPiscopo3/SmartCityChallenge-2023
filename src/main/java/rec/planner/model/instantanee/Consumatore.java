@@ -6,12 +6,14 @@ public class Consumatore implements Serializable {
 
     private String smartMeter;
     private String homeController;
+    private String nome;
     private double consumoMedio;
     private double consumoNominale;
 
-    public Consumatore(String smartMeter, String homeController, double consumoMedio, double consumoNominale) {
+    public Consumatore(String smartMeter, String homeController, String nome, double consumoMedio, double consumoNominale) {
         this.smartMeter = smartMeter;
         this.homeController = homeController;
+        this.nome = nome;
         this.consumoMedio = consumoMedio;
         this.consumoNominale = consumoNominale;
     }
@@ -49,5 +51,13 @@ public class Consumatore implements Serializable {
 
     public void setHomeController(String homeController) {
         this.homeController = homeController;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 }
