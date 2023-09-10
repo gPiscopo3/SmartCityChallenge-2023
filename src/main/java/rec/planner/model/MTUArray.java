@@ -62,9 +62,7 @@ public class MTUArray<T> implements Iterable<T>, Serializable {
     }
 
     public T getValue(int mtu) throws IllegalArgumentException{
-        if(!isMTU(mtu))
-            throw new IllegalArgumentException();
-        return values.get(mtu);
+        return getValues().get(mtu);
     }
 
     public void setValue(int mtu, T value) throws IllegalArgumentException{
