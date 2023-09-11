@@ -91,6 +91,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
 
+
                     } catch(Exception ignored) {}
 
                 }
@@ -142,8 +143,10 @@ public class SchedulerDemon extends Thread implements Configuration {
             }catch (NotFoundElementException ingnored){}
 
 
-        dataManager.getPreferenze(smartMeter);
+        preferenza = dataManager.getPreferenze(smartMeter);
 
+        if(preferenza == null)
+            throw new NotFoundElementException();
 
         return preferenza;
 
