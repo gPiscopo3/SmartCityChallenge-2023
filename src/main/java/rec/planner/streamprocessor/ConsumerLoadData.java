@@ -2,6 +2,7 @@ package rec.planner.streamprocessor;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.instantanee.ProduttoreConsumatoreMTU;
 
 import java.time.Duration;
@@ -33,7 +34,10 @@ public class ConsumerLoadData extends Consumer{
                     ProduttoreConsumatoreMTU prodcons = gson.fromJson(record.value(), ProduttoreConsumatoreMTU.class);
                     prodcons.setTime();
                     System.out.println(prodcons);
-                    dataManager.updateConsumatore(prodcons, 0.5);
+                    try {
+                        dataManager.updateConsumatore(prodcons.getSmartMeter(), prodcons.getValue(), 0.5);
+                    } catch (NotFoundElementException ignored) {
+                    }
                 }
             }
         }

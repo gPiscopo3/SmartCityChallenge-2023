@@ -57,6 +57,8 @@ public class PythonScheduler implements Scheduler, Configuration {
         for(int j = 0; j < nConsumatori; j++){
             Consumatore consumatore = consumatori.get(j);
             consumi[j] = consumatore.getConsumoMedio();
+            if(consumi[j] == 0)
+                consumi[j] = consumatore.getConsumoNominale();
             durata[j] = preferenze.get(consumatore.getSmartMeter()).getDurata();
             for(int i = 0; i < MTU_NUMBER; i++) {
                 Boolean disp = preferenze.get(consumatore.getSmartMeter()).getDisponibilita().getValue(i);
@@ -109,7 +111,8 @@ public class PythonScheduler implements Scheduler, Configuration {
                         arrayAllocazione.add(false);
 
                 }
-                arrayScheduling.add(new AllocazioneConsumatore(forecasting.getGiorno(), consumatori.get(j).getSmartMeter(), MTUArray.ofValues(arrayAllocazione)));
+                arrayScheduling.add(new AllocazioneConsumatore(forecasting.getGiorno(), consumatori.get(j).getSmartMeter(),
+                        consumatori.get(j).getConsumoMedio(), MTUArray.ofValues(arrayAllocazione)));
 
             }
 

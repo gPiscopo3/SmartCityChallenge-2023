@@ -4,5 +4,6 @@
     <fitting>fittingProduzione.py</fitting>
     <costOptimizer>costOptimizer.py</costOptimizer>
     <forecaster>LoadModel.py</forecaster>
-    <trainer>src/main/python/SaveModel.py</trainer>
+    <trainer>SaveModel.py</trainer>
+    <preferenze>esterne</preferenze>
 </config>

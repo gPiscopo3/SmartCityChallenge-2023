@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import rec.planner.data.kafka.KafkaDataManager;
-import rec.planner.data.kafka.KafkaMongoDataManager;
+import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.model.serializer.LocalDateSerializer;
 
 import java.time.LocalDate;
@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public abstract class Consumer {
     private KafkaConsumer<String, String> consumer;
-    protected KafkaDataManager dataManager = KafkaMongoDataManager.getInstance();
+    protected KafkaDataManager dataManager = MongoDataManager.getInstance();
     Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer()).create();
 
     public Consumer(String brokers, String groupId, String offset) {

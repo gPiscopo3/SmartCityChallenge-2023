@@ -10,4 +10,10 @@ public interface Configuration {
     String FORECASTER_FILE = read("forecaster");
     String TRAINER_FILE = read("trainer");
 
+    enum FontePreferenze{
+        INTERNE, ESTERNE;
+    }
+
+    FontePreferenze FONTE_PREFERENZE = FontePreferenze.valueOf(read("preferenze").toUpperCase());
+
 }

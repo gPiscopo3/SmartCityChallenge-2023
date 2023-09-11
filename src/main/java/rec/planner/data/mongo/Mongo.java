@@ -1,4 +1,4 @@
-package rec.planner.data;
+package rec.planner.data.mongo;
 
 
 import com.mongodb.MongoClientSettings;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class Mongo {
 
-    public static void main(String... args){
+    /*public static void main(String... args){
 
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
 
@@ -47,5 +47,5 @@ public class Mongo {
 
 
 
-    }
+    }*/
 }

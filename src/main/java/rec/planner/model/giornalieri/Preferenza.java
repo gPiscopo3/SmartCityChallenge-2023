@@ -5,6 +5,8 @@ import rec.planner.model.Tipologia;
 
 import java.time.LocalDate;
 
+import static rec.planner.model.Day.MTU_NUMBER;
+
 public class Preferenza {
 
     private LocalDate giorno;
@@ -42,7 +44,7 @@ public class Preferenza {
     }
 
     public int getDurata() {
-        return durata;
+        return (int) (((double)durata*MTU_NUMBER)/disponibilita.mtuNumber());
     }
 
     public void setDurata(int durata) {
@@ -70,7 +72,7 @@ public class Preferenza {
         return "Preferenza{" +
                 "giorno=" + giorno +
                 ", smartMeter='" + smartMeter + '\'' +
-                ", disponibilita=" + disponibilita +
+                ", disponibilita=" + getDisponibilita() +
                 ", durata=" + durata +
                 ", tipologia=" + tipologia +
                 '}';

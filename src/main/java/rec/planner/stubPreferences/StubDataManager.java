@@ -6,7 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import rec.planner.data.MongoInstance;
+import rec.planner.data.mongo.MongoInstance;
 
 import static com.mongodb.client.model.Filters.eq;
 

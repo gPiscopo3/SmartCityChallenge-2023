@@ -1,5 +1,7 @@
 package rec.planner.model;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.*;
@@ -60,9 +62,7 @@ public class MTUArray<T> implements Iterable<T>, Serializable {
     }
 
     public T getValue(int mtu) throws IllegalArgumentException{
-        if(!isMTU(mtu))
-            throw new IllegalArgumentException();
-        return values.get(mtu);
+        return getValues().get(mtu);
     }
 
     public void setValue(int mtu, T value) throws IllegalArgumentException{
@@ -111,6 +111,12 @@ public class MTUArray<T> implements Iterable<T>, Serializable {
         return values;
     }
 
+    public int mtuNumber(){
+        return values.size();
+    }
+
+
+    @JsonSetter
     public void setValues(List<T> values) {
         this.values = values;
     }

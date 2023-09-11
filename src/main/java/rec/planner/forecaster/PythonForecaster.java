@@ -42,6 +42,7 @@ public class PythonForecaster implements Forecaster, Configuration {
             i++;
         }
         writer.close();
+
     }
 
     @Override

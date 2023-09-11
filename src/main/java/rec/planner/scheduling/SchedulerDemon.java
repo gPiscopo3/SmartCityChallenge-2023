@@ -1,23 +1,17 @@
 package rec.planner.scheduling;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import rec.planner.Configuration;
+import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.data.scheduling.PreferenzeApi;
 import rec.planner.data.scheduling.PreferenzeRestApi;
 import rec.planner.data.scheduling.SchedulingDataManager;
-import rec.planner.data.scheduling.SchedulingMongoDataManager;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
-import rec.planner.model.MTUArray;
-import rec.planner.model.Tipologia;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.giornalieri.SchedulingGiornaliero;
 import rec.planner.model.giornalieri.TariffeCorrenti;
 import rec.planner.model.instantanee.Consumatore;
-import rec.planner.model.serializer.BooleanToIntSerializer;
-import rec.planner.model.serializer.LocalDateSerializer;
 import rec.planner.streamprocessor.ProducerScheduling;
 
 import java.time.LocalDate;
@@ -26,7 +20,7 @@ import java.util.*;
 
 public class SchedulerDemon extends Thread implements Configuration {
 
-    private final SchedulingDataManager dataManager = SchedulingMongoDataManager.getInstance();
+    private final SchedulingDataManager dataManager = MongoDataManager.getInstance();
     private final PreferenzeApi preferenzeApi= PreferenzeRestApi.getRestApi();
 
     private final Scheduler scheduler = PythonScheduler.fittingProduzione();
@@ -92,16 +86,10 @@ public class SchedulerDemon extends Thread implements Configuration {
 
                 for(Consumatore consumatore: consumatori){
                     try {
-                        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
-                                .registerTypeAdapter(Boolean.class, new BooleanToIntSerializer()).create();
 
-                        Preferenza preferenza =
-                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(),
-                                MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE);
-                        // Preferenza preferenza = preferenzeApi.getPreferenze(consumatore.getSmartMeter());
+                        Preferenza preferenza = recuperaPreferenze(consumatore.getSmartMeter());
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
-
 
                     } catch(Exception ignored) {}
 
@@ -138,11 +126,36 @@ public class SchedulerDemon extends Thread implements Configuration {
         }
     }
 
+    private Preferenza recuperaPreferenze(String smartMeter) throws NotFoundElementException{
+
+         /*Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateSerializer())
+                                .registerTypeAdapter(Boolean.class, new BooleanToIntSerializer()).create();
+
+                        Preferenza preferenza =
+                                new Preferenza(Day.getNextDay(), consumatore.getSmartMeter(), MTUArray.ofValues(generateArray()), new Random().nextInt(4), Tipologia.NON_INTERROMPIBILE)*/
+
+        Preferenza preferenza = null;
+
+        if(FONTE_PREFERENZE.equals(FontePreferenze.INTERNE))
+            try {
+                dataManager.savePreferenza(preferenzeApi.getPreferenze(smartMeter));
+            }catch (NotFoundElementException ingnored){}
+
+
+        dataManager.getPreferenze(smartMeter);
+
+
+        return preferenza;
+
+
+    }
+
+
     private LocalDate domani(){
         return Day.getNextDay();
     }
 
-    private List<Boolean> generateArray(){
+    public static List<Boolean> generateArray(){
 
         List<Boolean> array = new ArrayList<>();
         for(int i = 0 ; i <24; i++)
