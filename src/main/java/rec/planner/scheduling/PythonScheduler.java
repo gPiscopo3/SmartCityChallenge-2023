@@ -86,7 +86,7 @@ public class PythonScheduler implements Scheduler, Configuration {
 
 
         //esegui il modello
-        ProcessBuilder processBuilder = new ProcessBuilder("python", filepath, String.valueOf(MTU_NUMBER), String.valueOf(nConsumatori),
+        ProcessBuilder processBuilder = new ProcessBuilder("python3", filepath, String.valueOf(MTU_NUMBER), String.valueOf(nConsumatori),
                 gson.toJson(produzione), gson.toJson(consumi), gson.toJson(costi), gson.toJson(ricavi), gson.toJson(incentivi),
                 gson.toJson(disponibilita), gson.toJson(durata), gson.toJson(interrompibile));
 

@@ -105,6 +105,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                     producerScheduling.produce("DA_scheduling", scheduling);
                     System.out.println("scheduling effettuato");
                 }catch (Exception e){
+                    System.err.println(e);
                     System.out.println("impossibile effettuare lo scheduling");
                     try {
                         Thread.sleep(1000*3600*hour_min);

@@ -10,10 +10,12 @@ RUN pip3 install xpress=='9.0.7'
 RUN mkdir /Challenge
 COPY /target/scheduling-jar-with-dependencies.jar /Challenge
 COPY config.xml /Challenge
+COPY src/main/python/fittingProduzione.py /Challenge
 
 WORKDIR /Challenge
 
-RUN chmod 775 scheduling-jar-with-dependencies.jar 
+RUN chmod 775 scheduling-jar-with-dependencies.jar
+RUN chmod 775 fittingProduzione.py
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "scheduling-jar-with-dependencies.jar"]

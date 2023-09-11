@@ -25,13 +25,14 @@ public class ForecasterDemon extends Thread implements Configuration {
     @Override
     public void run(){
 
-        System.out.println("start demon forecaster");
+        System.out.println("Starting forecaster demon");
         while(true){
 
-
+            System.out.println("Checking for the next day energy forecast");
             if(!dataManager.isForecastingPresent(Day.getNextDay())){
 
                 IrradianzaGiornaliera irradianzaGiornaliera;
+                System.out.println("Energy forecasting not present, retrieving meteo forecast");
 
                 if(!dataManager.isIrradiazioneGiornalieraPresent(Day.getNextDay()))
                 {
@@ -45,15 +46,19 @@ public class ForecasterDemon extends Thread implements Configuration {
                     throw new RuntimeException(e);
                 }
 
-
+                System.out.println("Forecasting next day's energy production");
+                System.out.println(irradianzaGiornaliera.toString());
                 ForecastingGiornaliero forecastingGiornaliero = forecaster.forecasta(Day.getNextDay(), irradianzaGiornaliera);
+                System.out.println(forecastingGiornaliero.toString());
                 dataManager.setForecasting(forecastingGiornaliero);
-                System.out.println("forecasting effettuato");
+
+                System.out.println("Forecasting perfomed");
                 try {
                     producer.produce("DA_gen_data", forecastingGiornaliero);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("Next day energy forecast is now on database.");
 
             }
 

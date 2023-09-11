@@ -2,7 +2,6 @@ import pandas as pd
 import pickle
 
 data_Wet = pd.read_csv("irradiance.csv")
-
 model_pkl_file = "save_model.pkl"
 
 with open(model_pkl_file, 'rb') as file:
@@ -20,5 +19,4 @@ pred_futuro = pred_futuro.to_frame()
 pd.set_option("display.max_columns", None)
 pd.set_option("display.max_rows", None)
 
-print(pred_futuro['predicted_mean'].to_string(index=False))
-
+print(pred_futuro['predicted_mean'].to_string(index=False, header=False))

@@ -86,8 +86,6 @@ public class SolcastMeteoService implements MeteoService{
         return instance;
     }
 
-
-
     /*public static void main(String... args){
         System.out.println(new SolcastMeteoService().getIrradazioneGiornaliera(LocalDate.of(2023,07,11)));
     }*/
