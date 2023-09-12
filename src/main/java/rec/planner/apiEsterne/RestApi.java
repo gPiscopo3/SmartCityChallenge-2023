@@ -93,8 +93,8 @@ public interface RestApi {
      * @param consumo
      */
     @PUT
-    @Path("/consumers/{smartMeter}")
-    Response updateConsumoInstantaneo(@PathParam("smartMeter") String smartMeter, double consumo);
+    @Path("/consumers")
+    Response updateConsumoInstantaneo(@QueryParam("smartMeter") String smartMeter, double consumo);
 
 
     /**
