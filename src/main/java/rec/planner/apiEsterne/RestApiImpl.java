@@ -4,6 +4,7 @@ package rec.planner.apiEsterne;
 import jakarta.ws.rs.core.Response;
 import rec.planner.data.mongo.MongoDataManager;
 import rec.planner.data.restApi.RestApiDataManager;
+import rec.planner.exception.AlreadyPresentElementException;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
 import rec.planner.model.giornalieri.AllocazioneConsumatore;
@@ -154,29 +155,15 @@ public class RestApiImpl implements RestApi {
     }
 
     @Override
-    public Response getPreferenzeByDate(String data, String smartMeter) {
+    public Response getPreferenze(String smartMeter) {
 
         LocalDate localDate;
 
         try {
-
-            if (data == null || data.equals("") || data.equalsIgnoreCase("last")) {
-                localDate = Day.getNextDay();
-                while (!dataManager.isForecastingPresent(localDate) && localDate.isAfter(LocalDate.EPOCH))
-                    localDate = localDate.minusDays(1);
-                if (localDate.equals(LocalDate.EPOCH))
-                    return Response.status(Response.Status.NOT_FOUND).build();
-            } else if (data.equalsIgnoreCase("today"))
-                localDate = Day.getDay();
-            else if (data.equalsIgnoreCase("tomorrow") || data.equalsIgnoreCase("next"))
-                localDate = Day.getNextDay();
-            else
-                localDate = getLocalDate(data);
-
             if(smartMeter!=null && !smartMeter.equals(""))
-                return Response.ok(dataManager.getPreferenze(localDate, smartMeter)).build();
+                return Response.ok(dataManager.getPreferenze(smartMeter)).build();
             else
-                return Response.ok(dataManager.getPreferenze(localDate)).build();
+                return Response.ok(dataManager.getPreferenze()).build();
 
         } catch (NotFoundElementException e) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -188,12 +175,14 @@ public class RestApiImpl implements RestApi {
     @Override
     public Response setPreferenze(Preferenza preferenze) {
 
+        System.out.println(preferenze);
 
         try {
             dataManager.savePreferenza(preferenze);
             return Response.created(URI.create("preferenze/?data=" + preferenze.getGiorno().format(DateTimeFormatter.ISO_LOCAL_DATE)
                     + "&smartMeter=" + preferenze.getSmartMeter())).build();
         }catch (Exception e){
+            e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
@@ -203,7 +192,11 @@ public class RestApiImpl implements RestApi {
     @Override
     public Response registerConsumatore(Consumatore consumatore) {
 
-        dataManager.registerConsumatore(consumatore);
+        try {
+            dataManager.registerConsumatore(consumatore);
+        }catch (AlreadyPresentElementException e){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
         return Response.created(URI.create("/consumatori/" + consumatore.getSmartMeter())).build();
     }
 
@@ -228,11 +221,8 @@ public class RestApiImpl implements RestApi {
 
 
     @Override
-    public Response registerProduzione(String smartMeter, double produzione) {
+    public Response registerProduzione(ProduttoreConsumatoreMTU produttoreConsumatoreMTU) {
 
-        ProduttoreConsumatoreMTU produttoreConsumatoreMTU = new ProduttoreConsumatoreMTU();
-        produttoreConsumatoreMTU.setSmartMeter(smartMeter);
-        produttoreConsumatoreMTU.setValue(produzione);
         dataManager.addProduttore(produttoreConsumatoreMTU);
 
         return Response.ok().build();

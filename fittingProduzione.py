@@ -24,8 +24,7 @@ Durata = json.loads(sys.argv[9])
 #Interrompibile = np.array(M)
 Interrompibile = json.loads(sys.argv[10])
 
-print(N)
-print(M)
+
 allocazione = xp.vars(N, M, name="allocazione", vartype =xp.binary)
 differenza = [xp.var(name=f"differenza-{i}", vartype =xp.continuous) for i in range(N)]
 

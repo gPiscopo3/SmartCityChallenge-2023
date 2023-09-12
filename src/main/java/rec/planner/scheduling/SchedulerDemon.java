@@ -91,6 +91,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                         consumatoriScheduling.add(consumatore);
                         preferenze.put(consumatore.getSmartMeter(),preferenza);
 
+
                     } catch(Exception ignored) {}
 
                 }
@@ -105,6 +106,7 @@ public class SchedulerDemon extends Thread implements Configuration {
                     producerScheduling.produce("DA_scheduling", scheduling);
                     System.out.println("scheduling effettuato");
                 }catch (Exception e){
+                    System.err.println(e);
                     System.out.println("impossibile effettuare lo scheduling");
                     try {
                         Thread.sleep(1000*3600*hour_min);
@@ -141,18 +143,10 @@ public class SchedulerDemon extends Thread implements Configuration {
             }catch (NotFoundElementException ingnored){}
 
 
-        LocalDate localDate = LocalDate.now();
-            while(localDate.isAfter(LocalDate.EPOCH) && preferenza == null) {
-                try {
-                    preferenza = dataManager.getPreferenze(localDate, smartMeter);
-                }catch (NotFoundElementException e){
-                    localDate = localDate.minusDays(1);
-                }
-            }
+        preferenza = dataManager.getPreferenze(smartMeter);
 
-            if(preferenza == null)
-                throw new NotFoundElementException();
-
+        if(preferenza == null)
+            throw new NotFoundElementException();
 
         return preferenza;
 
@@ -164,7 +158,7 @@ public class SchedulerDemon extends Thread implements Configuration {
         return Day.getNextDay();
     }
 
-    private List<Boolean> generateArray(){
+    public static List<Boolean> generateArray(){
 
         List<Boolean> array = new ArrayList<>();
         for(int i = 0 ; i <24; i++)

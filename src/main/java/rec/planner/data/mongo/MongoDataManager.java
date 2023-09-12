@@ -12,6 +12,7 @@ import rec.planner.data.forecasting.ForecastingDataManager;
 import rec.planner.data.kafka.KafkaDataManager;
 import rec.planner.data.restApi.RestApiDataManager;
 import rec.planner.data.scheduling.SchedulingDataManager;
+import rec.planner.exception.AlreadyPresentElementException;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.MTUArray;
 import rec.planner.model.giornalieri.*;
@@ -103,12 +104,12 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
     @Override
-    public Preferenza getPreferenze(LocalDate date, String smartMeter) throws NotFoundElementException {
+    public Preferenza getPreferenze(String smartMeter) throws NotFoundElementException {
         MongoCollection<Document> collection =
                 database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
         Document document =
-                collection.find(and(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE)),eq("smartMeter", smartMeter))).first();
+                collection.find(eq("smartMeter", smartMeter)).first();
 
         try{
             return fromDocument(Objects.requireNonNull(document), Preferenza.class);
@@ -118,12 +119,12 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
     @Override
-    public List<Preferenza> getPreferenze(LocalDate date) {
+    public List<Preferenza> getPreferenze() {
         MongoCollection<Document> collection =
                 database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
         List<Preferenza> preferenze = new ArrayList<>();
-        for(Document preferenza :collection.find(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE))))
+        for(Document preferenza :collection.find())
             preferenze.add(fromDocument(preferenza, Preferenza.class));
         return preferenze;
     }
@@ -155,7 +156,8 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         MongoCollection<Document> collection =
                 database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
-        collection.insertOne(toDocument(preferenza));
+        if(collection.findOneAndReplace((eq("smartMeter", preferenza.getSmartMeter())),toDocument(preferenza))==null)
+            collection.insertOne(toDocument(preferenza));
     }
 
 
@@ -224,7 +226,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         return true;
     }
 
-    public void addProduttore(ProduttoreConsumatoreMTU produttore) {
+    public void addProduttore(ProduttoreConsumatoreMTU produttore)  {
         MongoCollection<ProduzioneMTU> collection = database.getCollection("produzione", ProduzioneMTU.class).withCodecRegistry(codecRegistry);
 
         ProduzioneMTU produzioneMTU = collection.find(and(eq("giorno", produttore.getGiorno()), eq("mtu", produttore.getMtu()))).first();
@@ -246,7 +248,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
             throw new NotFoundElementException();
         else
             collection.replaceOne(eq("smartMeter", smartMeter),
-                    new Consumatore(smartMeter, consumatoreMedio.getHomeController(),
+                    new Consumatore(smartMeter, consumatoreMedio.getHomeController(), consumatoreMedio.getNome(),
                             consumatoreMedio.getConsumoMedio()* ( 1 - factorEWMA) + consumo * factorEWMA,
                             consumatoreMedio.getConsumoNominale()));
     }
@@ -265,12 +267,14 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
     @Override
-    public void registerConsumatore(Consumatore consumatore) {
+    public void registerConsumatore(Consumatore consumatore) throws AlreadyPresentElementException {
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
 
         if(collection.find(eq("smartMeter", consumatore.getSmartMeter())).first() == null){
             collection.insertOne(consumatore);
         }
+        else
+            throw new AlreadyPresentElementException();
 
 
     }
