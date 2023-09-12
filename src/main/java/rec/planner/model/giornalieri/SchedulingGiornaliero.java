@@ -21,13 +21,18 @@ public class SchedulingGiornaliero implements Serializable {
         this.giorno = giorno;
         this.consumatori = consumatori;
 
+        List<Double> totaleList = new ArrayList<>();
+
         for(int i = 0; i <MTU_NUMBER; i++){
             double totale = 0;
             for(AllocazioneConsumatore consumatore: consumatori){
                 if(consumatore.getAllocazione().getValue(i).equals(true))
                     totale = totale + consumatore.getConsumo();
             }
+            totaleList.add(totale);
         }
+
+        totaleConsumato = MTUArray.ofValues(totaleList);
 
     }
 
