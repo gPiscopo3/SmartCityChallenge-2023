@@ -7,6 +7,7 @@ import rec.planner.data.restApi.RestApiDataManager;
 import rec.planner.exception.AlreadyPresentElementException;
 import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.Day;
+import rec.planner.model.MTUArray;
 import rec.planner.model.giornalieri.AllocazioneConsumatore;
 import rec.planner.model.giornalieri.ForecastingGiornaliero;
 import rec.planner.model.giornalieri.Preferenza;
@@ -227,5 +228,54 @@ public class RestApiImpl implements RestApi {
 
         return Response.ok().build();
     }
+
+    @Override
+    public Response getHomeControllerTotalConsume(String homeController) throws NotFoundElementException {
+
+        SchedulingGiornaliero schedulingGiornaliero = dataManager.getScheduling(Day.getNextDay());
+        ForecastingGiornaliero forecastingGiornaliero = dataManager.getForecasting(Day.getNextDay());
+        List<Consumatore> consumatori = dataManager.getConsumatoriByHomeController(homeController);
+
+        ForecastingGiornaliero nuovoForecasting = new ForecastingGiornaliero();
+
+        List<Double> balance = new ArrayList<>();
+
+        for(Double d : forecastingGiornaliero.getProduzione().getValues()){
+            balance.add(d / dataManager.getHomeController().size());
+        }
+
+        System.out.println(balance.toString());
+
+        for(Consumatore c : consumatori){
+
+            for(AllocazioneConsumatore allocazioneConsumatore : schedulingGiornaliero.getConsumatori()){
+
+                if(allocazioneConsumatore.getSmartMeter().equals(c.getSmartMeter())){
+
+                    for(int i = 0; i < allocazioneConsumatore.getAllocazione().getValues().size(); i++){
+
+                        if(allocazioneConsumatore.getAllocazione().getValues().get(i)){
+                             double value = balance.get(i) - c.getConsumoMedio();
+                             balance.set(i, value);
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return Response.ok(balance).build();
+    }
+
+    @Override
+    public Response getHomeControllers() {
+
+        return Response.ok(dataManager.getHomeController()).build();
+
+    }
+
 }
 

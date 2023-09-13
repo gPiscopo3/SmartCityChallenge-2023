@@ -3,6 +3,7 @@ package rec.planner.apiEsterne;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import rec.planner.exception.NotFoundElementException;
 import rec.planner.model.giornalieri.Preferenza;
 import rec.planner.model.instantanee.Consumatore;
 import rec.planner.model.instantanee.ProduttoreConsumatoreMTU;
@@ -106,5 +107,12 @@ public interface RestApi {
     @Consumes("application/json")
     Response registerProduzione(ProduttoreConsumatoreMTU produttoreConsumatoreMTU);
 
+    @GET
+    @Path("/producers")
+    Response getHomeControllerTotalConsume(@QueryParam("homeController") String homeController) throws NotFoundElementException;
+
+    @GET
+    @Path("/homeControllers")
+    Response getHomeControllers();
 
 }

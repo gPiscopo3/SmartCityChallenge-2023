@@ -46,7 +46,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
 
-    public static MongoDataManager getInstance(){
+    public static MongoDataManager getInstance() {
         return instance;
     }
 
@@ -54,7 +54,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     public List<Consumatore> getConsumatori() {
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
         List<Consumatore> consumatori = new ArrayList<>();
-        for(Consumatore consumatore: collection.find())
+        for (Consumatore consumatore : collection.find())
             consumatori.add(consumatore);
         return consumatori;
     }
@@ -68,7 +68,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         List<Double> ricavi = new ArrayList<>();
         List<Double> incentivi = new ArrayList<>();
 
-        for(Document document : documents) {
+        for (Document document : documents) {
             tariffaOraria = fromDocument(document, TariffaOraria.class);
             costi.add(tariffaOraria.getCostoAcquisto());
             ricavi.add(tariffaOraria.getRicavoVendita());
@@ -85,20 +85,20 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
 
         List<Consumatore> consumatori = new ArrayList<>();
 
-        for(Document document: collection.find(eq("homeController", homeController)))
+        for (Document document : collection.find(eq("homeController", homeController)))
             consumatori.add(fromDocument(document, Consumatore.class));
 
         return consumatori;
     }
 
     @Override
-    public SchedulingGiornaliero getScheduling(LocalDate date) throws NotFoundElementException{
+    public SchedulingGiornaliero getScheduling(LocalDate date) throws NotFoundElementException {
         MongoCollection<Document> collection =
                 database.getCollection("scheduling", Document.class).withCodecRegistry(codecRegistry);
         try {
             return fromDocument(Objects.requireNonNull(collection.find(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE))).first()),
                     SchedulingGiornaliero.class);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new NotFoundElementException();
         }
     }
@@ -111,9 +111,9 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         Document document =
                 collection.find(eq("smartMeter", smartMeter)).first();
 
-        try{
+        try {
             return fromDocument(Objects.requireNonNull(document), Preferenza.class);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new NotFoundElementException();
         }
     }
@@ -124,7 +124,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
                 database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
         List<Preferenza> preferenze = new ArrayList<>();
-        for(Document preferenza :collection.find())
+        for (Document preferenza : collection.find())
             preferenze.add(fromDocument(preferenza, Preferenza.class));
         return preferenze;
     }
@@ -146,7 +146,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
             fromDocument(Objects.requireNonNull(mongoCollection.find(eq("giorno", scheduling.getGiorno().
                     format(DateTimeFormatter.ISO_LOCAL_DATE))).first()), SchedulingGiornaliero.class);
             mongoCollection.replaceOne(eq("giorno", scheduling.getGiorno()), toDocument(scheduling));
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             mongoCollection.insertOne(toDocument(scheduling));
         }
     }
@@ -156,7 +156,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         MongoCollection<Document> collection =
                 database.getCollection("preferenze", Document.class).withCodecRegistry(codecRegistry);
 
-        if(collection.findOneAndReplace((eq("smartMeter", preferenza.getSmartMeter())),toDocument(preferenza))==null)
+        if (collection.findOneAndReplace((eq("smartMeter", preferenza.getSmartMeter())), toDocument(preferenza)) == null)
             collection.insertOne(toDocument(preferenza));
     }
 
@@ -168,7 +168,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         try {
             return fromDocument(Objects.requireNonNull(collection.find(eq("giorno", date.format(DateTimeFormatter.ISO_LOCAL_DATE))).first()),
                     ForecastingGiornaliero.class);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new NotFoundElementException();
         }
     }
@@ -198,9 +198,9 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     public IrradianzaGiornaliera getIrradiazioneGiornaliera(LocalDate date) throws NotFoundElementException {
 
         MongoCollection<Document> collection = database.getCollection("irradianza", Document.class).withCodecRegistry(codecRegistry);
-        try{
+        try {
             return fromDocument(Objects.requireNonNull(collection.find(eq("giorno", date.toString())).first()), IrradianzaGiornaliera.class);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             throw new NotFoundElementException();
         }
 
@@ -218,7 +218,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     @Override
     public boolean isIrradiazioneGiornalieraPresent(LocalDate date) {
 
-        try{
+        try {
             getIrradiazioneGiornaliera(date);
         } catch (NotFoundElementException e) {
             return false;
@@ -226,11 +226,11 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
         return true;
     }
 
-    public void addProduttore(ProduttoreConsumatoreMTU produttore)  {
+    public void addProduttore(ProduttoreConsumatoreMTU produttore) {
         MongoCollection<ProduzioneMTU> collection = database.getCollection("produzione", ProduzioneMTU.class).withCodecRegistry(codecRegistry);
 
         ProduzioneMTU produzioneMTU = collection.find(and(eq("giorno", produttore.getGiorno()), eq("mtu", produttore.getMtu()))).first();
-        if(produzioneMTU == null)
+        if (produzioneMTU == null)
             collection.insertOne(new ProduzioneMTU(produttore.getValue(), produttore.getMtu(), produttore.getGiorno()));
         else {
             produzioneMTU.setProduzione(produzioneMTU.getProduzione() + produttore.getValue());
@@ -240,16 +240,16 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     }
 
     @Override
-    public void updateConsumatore(String smartMeter, double consumo,  double factorEWMA) throws NotFoundElementException{
+    public void updateConsumatore(String smartMeter, double consumo, double factorEWMA) throws NotFoundElementException {
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
 
         Consumatore consumatoreMedio = collection.find(eq("smartMeter", smartMeter)).first();
-        if(consumatoreMedio==null)
+        if (consumatoreMedio == null)
             throw new NotFoundElementException();
         else
             collection.replaceOne(eq("smartMeter", smartMeter),
                     new Consumatore(smartMeter, consumatoreMedio.getHomeController(), consumatoreMedio.getNome(),
-                            consumatoreMedio.getConsumoMedio()* ( 1 - factorEWMA) + consumo * factorEWMA,
+                            consumatoreMedio.getConsumoMedio() * (1 - factorEWMA) + consumo * factorEWMA,
                             consumatoreMedio.getConsumoNominale()));
     }
 
@@ -259,7 +259,7 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
 
         MongoCollection<Document> collection = database.getCollection("tariffeOrarie", Document.class).withCodecRegistry(codecRegistry);
 
-        if(collection.find(eq("ora", tariffaOraria)).first() == null)
+        if (collection.find(eq("ora", tariffaOraria)).first() == null)
             collection.insertOne(toDocument(tariffaOraria));
         else
             collection.replaceOne(eq("ora", tariffaOraria.getOra()), toDocument(tariffaOraria));
@@ -270,13 +270,27 @@ public class MongoDataManager implements ForecastingDataManager, SchedulingDataM
     public void registerConsumatore(Consumatore consumatore) throws AlreadyPresentElementException {
         MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
 
-        if(collection.find(eq("smartMeter", consumatore.getSmartMeter())).first() == null){
+        if (collection.find(eq("smartMeter", consumatore.getSmartMeter())).first() == null) {
             collection.insertOne(consumatore);
-        }
-        else
+        } else
             throw new AlreadyPresentElementException();
 
 
     }
 
+    @Override
+    public List<String> getHomeController() {
+        List<String> homeControllers = new ArrayList<String>();
+        MongoCollection<Consumatore> collection = database.getCollection("consumatori", Consumatore.class).withCodecRegistry(codecRegistry);
+
+        for (Consumatore c : collection.find()) {
+            if (!homeControllers.contains(c.getHomeController())) {
+                homeControllers.add(c.getHomeController());
+            }
+        }
+        return homeControllers;
+
+    }
+
 }
+

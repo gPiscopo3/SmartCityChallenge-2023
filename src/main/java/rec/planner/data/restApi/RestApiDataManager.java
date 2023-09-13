@@ -28,4 +28,6 @@ public interface RestApiDataManager {
     void addProduttore(ProduttoreConsumatoreMTU produttore);
     void updateConsumatore(String smartMeter, double consumo, double factorEWMA) throws NotFoundElementException;
     void registerConsumatore(Consumatore consumatore) throws AlreadyPresentElementException;
+    List<String> getHomeController();
+
 }
