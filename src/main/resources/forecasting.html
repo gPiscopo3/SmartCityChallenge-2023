@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Forecasting</title>
+
+  <style>
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    input[type=date]{
+      width: 20%;
+      height: 12%;
+      padding: 12px 12px;
+      margin: 6px 0px;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+  </style>
+
+</head>
+<body>
+
+<div include-html="navbar.html"></div>
+<center>
+  <br><input  type="date" onchange = "updateForecasting()" placeholder="Data" name="uname" id="date"  required>
+  <br><br><br><br><br><br>
+</center>
+
+<div id="myDiv" class="centered">
+  <canvas id="myChart"></canvas>
+</div>
+</body>
+</html>
+
+<script src="include-html.js"></script>
+<script src="forecasting.js"></script>
+<script>
+  includeHTML();
+
+  var today = new Date();
+
+  // Aggiungi un giorno
+  var tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // Formatta la data come stringa "YYYY-MM-DD"
+  var tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+  // Imposta il valore di default nel campo di input
+  document.getElementById('date').value = tomorrowFormatted;
+
+  vediforecasting()
+</script>
+
+
+

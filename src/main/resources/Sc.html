@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    table {
+        border-radius: 12px;
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 50%;
+        /*background: #ffffff;*/
+
+    }
+
+    th{
+        cursor: pointer;
+    }
+
+    td, th {
+
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-bottom: 1px solid  #ffffff;
+        border-right: 1px solid #ffffff;
+        border-radius: 12px;
+    }
+
+    tr:nth-child(1) {
+        background-color: #c4c2c2;
+        border-radius: 12px;
+    }
+
+    th:nth-child(1){
+        background-color: #c4c2c2;
+        border-radius: 12px;
+    }
+
+    input[type=text]{
+        width: 20%;
+        height: 12%;
+        padding: 12px 12px;
+        margin: 6px 0px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+	input[type=date]{
+        width: 20%;
+        height: 12%;
+        padding: 12px 12px;
+        margin: 6px 0px;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+</style>
+<body>
+
+<div include-html="navbar.html"></div>
+  <center>
+
+
+      <br><input  type="date" onchange = "ottieniScheduling()" placeholder="Data" name="uname" id="date"  required>
+      <br>
+      <br><input type="text"   onchange = "ottieniScheduling()" placeholder="Appliance" name="uname" id="smartmeter" required>
+	  
+	 
+
+    <p id="result"></p>
+
+  </center>
+
+</body>
+<script src="scheduling.js"></script>
+<script src="include-html.js"></script>
+<script>
+
+    includeHTML();
+var today = new Date();
+  
+  // Aggiungi un giorno
+  var tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  // Formatta la data come stringa "YYYY-MM-DD"
+  var tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+  
+  // Imposta il valore di default nel campo di input
+  document.getElementById('date').value = tomorrowFormatted;
+
+
+	
+	ottieniScheduling();
+
+</script>
+</html>

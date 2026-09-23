@@ -1,0 +1,80 @@
+stages:
+  - compile
+  - build
+
+compile-job:
+  stage: compile
+  image:
+    name: maven:3.8.2-openjdk-17
+    pull_policy: if-not-present
+  artifacts:
+    paths:
+      - "**/target/*.jar"
+  script:
+    - echo "Compiling the code..."
+    - mvn package
+    - echo "Compile complete."
+
+scheduler-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-scheduler" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-scheduler:latest"
+    - echo "Compile complete."
+
+forecaster-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-forecaster" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-forecaster:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-forecaster:latest"
+    - echo "Compile complete."
+
+kafka-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-kafka" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-kafka:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-kafka:latest"
+    - echo "Compile complete."
+
+api-job:
+  image:
+    name: docker
+    pull_policy: if-not-present
+  services:
+    - name: docker:dind
+      pull_policy: if-not-present
+  stage: build
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -f "dockerfile-api" -t "$CI_REGISTRY_IMAGE/smartcitychallenge-api:latest" .
+    - docker push "$CI_REGISTRY_IMAGE/smartcitychallenge-api:latest"
+    - echo "Compile complete."

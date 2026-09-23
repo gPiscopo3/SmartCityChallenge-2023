@@ -1,0 +1,12 @@
+FROM eclipse-temurin:18-jre-focal
+
+RUN mkdir /Challenge
+COPY /target/api-jar-with-dependencies.jar /Challenge
+COPY config.xml /Challenge
+
+WORKDIR /Challenge
+
+RUN chmod 775 api-jar-with-dependencies.jar 
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "api-jar-with-dependencies.jar"]

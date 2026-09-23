@@ -1,0 +1,24 @@
+FROM ubuntu:latest
+
+# Aggiornamento dei repository, installazione di java e maven
+RUN apt-get update && apt-get install -y openjdk-18-jdk
+RUN apt-get install -y wget
+
+# Installare Python e relative librerie
+RUN apt-get install -y python3 && apt-get install -y python3-pip
+RUN pip3 install statsmodels && pip install pandas
+
+RUN mkdir /Challenge
+COPY /target/forecasting-jar-with-dependencies.jar /Challenge
+COPY config.xml /Challenge
+COPY /src/main/python/LoadModel.py /Challenge
+COPY forecaster.sh /Challenge
+
+WORKDIR /Challenge
+
+RUN chmod 775 forecasting-jar-with-dependencies.jar
+RUN chmod 775 forecaster.sh
+RUN chmod 775 LoadModel.py
+
+EXPOSE 8080
+ENTRYPOINT ["./forecaster.sh"]

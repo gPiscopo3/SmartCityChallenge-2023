@@ -1,0 +1,29 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+
+    <id>all-jars</id>
+
+    <formats>
+        <format>dir</format>
+    </formats>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <moduleSets>
+        <!-- Definizione delle classi principali e dei nomi dei JAR -->
+        <moduleSet>
+            <includes>
+                <include>rec.planner.application.ForecastingApplication</include>
+                <include>rec.planner.application.SchedulingApplication</include>
+                <include>rec.planner.application.KafkaApplication</include>
+            </includes>
+            <binaries>
+                <outputDirectory>bin</outputDirectory>
+                <unpack>false</unpack>
+                <includeDependencies>true</includeDependencies>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+
+</assembly>
